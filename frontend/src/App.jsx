@@ -6,6 +6,7 @@ import React, {useEffect, useState} from "react";
 // nvm use 20.19.6 
 // if not downloaded
 // nvm install 20.19.6
+import NavBar from "./components/NavBar";
 
 function App() {
   const [backendData, setBackendData] = useState([{}]);
@@ -22,7 +23,7 @@ function App() {
   }, [])
   return (
     <div >
-      GEIHFUHIHDKJSNDJK
+      <NavBar></NavBar>
     </div>
   )
 }
