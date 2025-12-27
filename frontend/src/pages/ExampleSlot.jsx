@@ -1,5 +1,7 @@
 
-import myImage from './assets/images/my-image.jpg'; 
+// import myImage from './assets/images/my-image.jpg'; 
+import '../slot.css';
+
 
 function ExampleSlot() {
   
@@ -96,19 +98,26 @@ function ExampleSlot() {
   setTimeout(rollAll, 1000);
   return (
     <div>
-      <div class="slots">
-        <div class="reel"></div>
-        <div class="reel"></div>
-        <div class="reel"></div>
+      <div className="slots">
+        <div className="reel"></div>
+        <div className="reel"></div>
+        <div className="reel"></div>
         <p>Step-by-step tutorial for this pen at <a target="_blank" href="https://youtu.be/boI2B4Gpp34">YouTube</a></p>
         <p>Want to determine the outcome?<br /> Here's <a target="_blank" href="https://codepen.io/josfabre/pen/KKLwxbE">a rigged version!</a></p>
       </div>
 
-      <div id="debug" class="debug"></div>
+      <div id="debug" className="debug"></div>
 
-      <img style="position:fixed; left: 0; top: 0; height: 100vh; width: auto;"  src="https://assets.codepen.io/439000/slotreel.webp"/>
-      <a target="_blank" href="https://codepen.io/josfabre/pens/public" style="position: fixed; left: 8em; top: 1em; font-family: Sans-Serif; color: #333; font-size: 13px; text-decoration: none; text-transform: uppercase; padding: 0.5em 1em; border: 1px solid #333; border-radius: 6px; opacity: 0.9; ">All my pens</a>
+      <img style={{position:"fixed", left:"0", top:"0", height:"100vh", width:"auto"}}  src="https://assets.codepen.io/439000/slotreel.webp"/>
+      <a target="_blank" href="https://codepen.io/josfabre/pens/public" 
+        style={{
+          position: "fixed", left: "8em", top: "1em", fontFamily: "sans-serif", color: "#333", fontSize:"13px", textDecoration:"none",
+          textTransform:"uppercase", padding: "0.5em 1em", border: "1px solid #333", borderRadius: "6px", opacity: "0.9"
+        }}
+      >All my pens</a>
       <button>PLAY</button>
     </div>  
   )
 }
+
+export default ExampleSlot;
