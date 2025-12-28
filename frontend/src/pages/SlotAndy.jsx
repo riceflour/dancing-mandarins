@@ -27,9 +27,15 @@ function SlotAndy() {
     "Don't hate the coder",
   ];
 
-  const RepeatButton = ({ onClick }) => (
-    <button aria-label="Play again" id="repeatButton" onClick={onClick} />
-  );
+  // const RepeatButton = ({ onClick }) => (
+  //   <button aria-label="Play again" id="repeatButton" onClick={onClick} />
+  // );
+
+  const PlayButton = ({ onClick }) => (
+    <button className="casino-play-btn" onClick={onClick}>
+      PLAY
+    </button>
+  )
 
   const WinningSound = () => (
     <audio autoPlay className="player" preload="none">
@@ -185,7 +191,12 @@ function SlotAndy() {
           <div className="gradient-fade" />
         </div>
 
-        {winner !== null && <RepeatButton onClick={handleClick} />}
+        {winner !== null && 
+          <div>
+            <PlayButton onClick={handleClick} />
+            {/* <RepeatButton onClick={handleClick} /> */}
+          </div>
+        }
       </div>
     );
   };
