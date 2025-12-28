@@ -7,6 +7,7 @@ import React, {useEffect, useState} from "react";
 // if not downloaded
 // nvm install 20.19.6
 import NavBar from "./components/NavBar";
+// import ExampleSlot from "./pages/ExampleSlot";
 
 function App() {
   const [backendData, setBackendData] = useState([{}]);
