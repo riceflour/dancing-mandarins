@@ -10,7 +10,7 @@ import SlotAndy from "../pages/SlotAndy";
 function NavBar() {
 
   return (
-    <div style={{}}>
+    <div style={{padding: "2% 3%"}}>
       {/* Navigation */}
       <nav style={{ fontSize: "24px"}}>
         <Link to="/">Slots</Link> |{" "}
