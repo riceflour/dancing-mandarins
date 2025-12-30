@@ -42,203 +42,100 @@ function SlotAndy() {
   );
 
   const Spinner = forwardRef(({ onFinish, timer }, ref) => {
-    const [position, setPosition] = useState(0);
-    const [timeRemaining, setTimeRemaining] = useState(timer);
+    const [symbols, setSymbols] = useState([null, null, null]); // 3 symbols visible
     const timerRef = useRef();
-    const multiplierRef = useRef(Math.floor(Math.random() * (4 - 1) + 1));
-    const startPositionRef = useRef(
-      Math.floor(Math.random() * 9) * ICON_HEIGHT * -1
-    );
-    const speedRef = useRef(ICON_HEIGHT * multiplierRef.current);
+    const multiplierRef = useRef(Math.floor(Math.random() * 3) + 1);
+    const ICON_HEIGHT = 188;
+
+    const SYMBOL_KEYS = [
+      "ten","coins","bao","tree","boat","chingling",
+      "symbol_a","symbol_j","symbol_k","symbol_q",
+      "fu","drums","nine"
+    ]; // match your SYMBOLS object
 
     const reset = useCallback(() => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
+      if (timerRef.current) clearInterval(timerRef.current);
 
-      startPositionRef.current = Math.floor(Math.random() * 9) * ICON_HEIGHT * -1;
-      multiplierRef.current = Math.floor(Math.random() * (4 - 1) + 1);
-      speedRef.current = ICON_HEIGHT * multiplierRef.current;
-
-      setPosition(startPositionRef.current);
-      setTimeRemaining(timer);
-
-      timerRef.current = setInterval(() => {
-        tick();
-      }, 100);
-    }, [timer]);
-
-    const getSymbolFromPosition = useCallback(() => {
-      // const totalSymbols = 9;
-      const totalSymbols = 13;
-      const middle = Math.abs(startPositionRef.current / ICON_HEIGHT) % totalSymbols;
-      const symbols = [
-        (middle - 1 + totalSymbols) % totalSymbols, // top
-        middle,                                     // middle
-        (middle + 1) % totalSymbols,                // bottom
-      ];
-      // Defer onFinish to avoid calling state updates during render
-      setTimeout(() => {
-        onFinish(symbols);
-      }, 0);
-
-
-      // const maxPosition = ICON_HEIGHT * (totalSymbols - 1) * -1;
-      // const moved = (timer / 100) * multiplierRef.current;
-      // let currentPosition = startPositionRef.current;
-
-      // for (let i = 0; i < moved; i++) {
-      //   currentPosition -= ICON_HEIGHT;
-      //   if (currentPosition < maxPosition) {
-      //     currentPosition = 0;
-      //   }
-      // }
-
-      // // Defer onFinish to avoid calling state updates during render
-      // setTimeout(() => {
-      //   onFinish(currentPosition);
-      // }, 0);
-    }, [onFinish, totalSymbols]); // }, [timer, onFinish]);
+      timerRef.current = setInterval(() => tick(), 100);
+    }, []);
 
     const tick = useCallback(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 0) {
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-          }
-          getSymbolFromPosition();
-          return 0;
-        }
+      // generate 3 random symbols for spinning
+      const newSymbols = Array(3)
+        .fill(0)
+        .map(() => SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]);
+      setSymbols(newSymbols);
 
-        setPosition((prevPosition) => prevPosition - speedRef.current);
-        return prev - 100;
-      });
-    }, [getSymbolFromPosition]);
+      // stop spinning after timer
+      timerRef.current = setTimeout(() => {
+        clearInterval(timerRef.current);
+        onFinish(newSymbols);
+      }, timer);
+    }, [onFinish, timer]);
 
-    useEffect(() => {
-      reset();
-      return () => {
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-        }
-      };
-    }, [reset]);
+    useImperativeHandle(ref, () => ({ reset }), [reset]);
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        reset,
-      }),
-      [reset]
-    );
+    // useEffect(() => { // keeps spinning forever
+    //   reset();
+    //   return () => clearInterval(timerRef.current);
+    // }, [reset]);
 
     return (
-      <div
-        style={{ backgroundPosition: `0px ${position}px` }}
-        className="icons"
-      />
+      <div className="spinner-column">
+        {symbols.map((symbolKey, i) => (
+          <img
+            key={i}
+            src={get_symbol_image(symbolKey, true)} // true = gold active
+            style={{
+              width: ICON_HEIGHT,
+              height: ICON_HEIGHT,
+              display: "block"
+            }}
+            alt={symbolKey}
+          />
+        ))}
+      </div>
     );
   });
 
-  Spinner.displayName = "Spinner";
-
   const SlotMachine = () => {
-    const [winner, setWinner] = useState(null);
-    const [matches, setMatches] = useState([]);
-    const [loserMessage, setLoserMessage] = useState("");
-    // const spinnerRefs = useRef([null, null, null]); 3 x 3 and only 1 row count, 1 x 3 counts
     const REELS = 5;
-    const ROWS = 3;
-    const TOTAL_SYMBOLS = 13;
-    const spinnerRefs = useRef(Array(REELS).fill(null)); // 5 x 3
+    const spinnerRefs = useRef(Array(REELS).fill(null));
 
-    const handleClick = () => {
-      setWinner(null);
-      setMatches([]);
-      setLoserMessage("");
-      spinnerRefs.current.forEach((spinner) => spinner?.reset());
+    const handleFinish = (symbols) => {
+      console.log("Reel finished:", symbols);
+      // Here you can handle matches, winner logic, etc.
     };
 
-    const handleFinish = (value) => {
-      // setMatches((prev) => {
-      //   const updated = [...prev, value];
-
-      //   if (updated.length === 3) {
-      //     const allSame = updated.every((v) => v === updated[0]);
-
-      //     // Defer state update to avoid React warning
-      //     setTimeout(() => {
-      //       setWinner(allSame);
-      //       if (!allSame) {
-      //         setLoserMessage(
-      //           LOSER_MESSAGES[Math.floor(Math.random() * LOSER_MESSAGES.length)]
-      //         );
-      //       }
-      //     }, 0);
-      //   }
-
-      //   return updated;
-      // });
-      setReelResults((prev) => {
-        const updated = [...prev, symbols];
-        if (updated.length === REELS) {
-          evaluateBoard(updated); 
-        }
-        return updated
-      })
+    const handleClick = () => {
+      spinnerRefs.current.forEach(spinner => spinner?.reset());
     };
 
     return (
       <div>
-        {winner && <WinningSound />}
-        <h1 style={{ color: "white" }}>
-          <span>
-            {winner === null
-              ? "Waiting…"
-              : winner
-              ? "🤑 Pure skill! 🤑"
-              : loserMessage}
-          </span>
-        </h1>
-
+        <button onClick={handleClick}>Spin</button>
         <div className="spinner-container">
-          {/* {[1000, 1400, 2200].map((timer, index) => (
+          {Array.from({ length: REELS }).map((_, index) => (
             <Spinner
               key={index}
+              timer={1000 + index * 300}
               onFinish={handleFinish}
-              timer={timer}
-              ref={(el) => (spinnerRefs.current[index] = el)}
+              ref={el => (spinnerRefs.current[index] = el)}
             />
-          ))} */}
-          {
-            Array.from({ length: REELS }).map((_, index) => {
-              <Spinner 
-                key={index}
-                timer={1000 + index * 300}
-                onFinish={handleFinish}
-                ref={(el) => (spinnerRefs.current[index] = el)}
-
-              />
-            })
-          }
-          <div className="gradient-fade" />
+          ))}
         </div>
-
-        {winner !== null && 
-          <div>
-            <PlayButton onClick={handleClick} />
-            {/* <RepeatButton onClick={handleClick} /> */}
-          </div>
-        }
       </div>
     );
   };
+
 
   return (
     <div className="slot-page">
       <SlotMachine />
     </div>
-  )
+  );
+
 }
 
 export default SlotAndy;
+
