@@ -10,18 +10,18 @@ import NavBar from "./components/NavBar";
 // import ExampleSlot from "./pages/ExampleSlot";
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
+  // const [backendData, setBackendData] = useState([{}]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api");
-      const data = await response.json();
-      console.log(data);
-      setBackendData(data);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetch("/api");
+  //     const data = await response.json();
+  //     console.log(data);
+  //     setBackendData(data);
       
-    }
-    fetchData();
-  }, [])
+  //   }
+  //   fetchData();
+  // }, [])
   return (
     <div >
       <NavBar></NavBar>
