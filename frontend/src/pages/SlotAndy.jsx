@@ -42,61 +42,62 @@ function SlotAndy() {
   );
 
   const Spinner = forwardRef(({ onFinish, timer }, ref) => {
-    const [symbols, setSymbols] = useState([null, null, null]); // 3 symbols visible
-    const timerRef = useRef();
-    const multiplierRef = useRef(Math.floor(Math.random() * 3) + 1);
-    const ICON_HEIGHT = 188;
+    const [symbols, setSymbols] = useState([null, null, null]);
+    const symbolsRef = useRef(symbols);
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
 
     const SYMBOL_KEYS = [
       "ten","coins","bao","tree","boat","chingling",
       "symbol_a","symbol_j","symbol_k","symbol_q",
       "fu","drums","nine"
-    ]; // match your SYMBOLS object
+    ];
 
-    const reset = useCallback(() => {
-      if (timerRef.current) clearInterval(timerRef.current);
+    const spinOnce = () => {
+      const newSymbols = Array.from({ length: 3 }, () =>
+        SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
+      );
 
-      timerRef.current = setInterval(() => tick(), 100);
-    }, []);
-
-    const tick = useCallback(() => {
-      // generate 3 random symbols for spinning
-      const newSymbols = Array(3)
-        .fill(0)
-        .map(() => SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]);
+      symbolsRef.current = newSymbols; // ✅ keep latest
       setSymbols(newSymbols);
+      // setSymbols(
+      //   Array.from({ length: 3 }, () =>
+      //     SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
+      //   )
+      // );
+    };
+
+    const reset = () => {
+      // clear any previous spin
+      clearInterval(intervalRef.current);
+      clearTimeout(timeoutRef.current);
+
+      // start spinning
+      intervalRef.current = setInterval(spinOnce, 100);
 
       // stop spinning after timer
-      timerRef.current = setTimeout(() => {
-        clearInterval(timerRef.current);
-        onFinish(newSymbols);
+      timeoutRef.current = setTimeout(() => {
+        clearInterval(intervalRef.current);
+        onFinish?.(symbolsRef.current);
       }, timer);
-    }, [onFinish, timer]);
+    };
 
-    useImperativeHandle(ref, () => ({ reset }), [reset]);
-
-    // useEffect(() => { // keeps spinning forever
-    //   reset();
-    //   return () => clearInterval(timerRef.current);
-    // }, [reset]);
+    useImperativeHandle(ref, () => ({ reset }));
 
     return (
       <div className="spinner-column">
         {symbols.map((symbolKey, i) => (
           <img
             key={i}
-            src={get_symbol_image(symbolKey, true)} // true = gold active
-            style={{
-              width: ICON_HEIGHT,
-              height: ICON_HEIGHT,
-              display: "block"
-            }}
+            src={get_symbol_image(symbolKey, true)}
+            style={{ width: 188, height: 188, display: "block" }}
             alt={symbolKey}
           />
         ))}
       </div>
     );
   });
+
 
   const SlotMachine = () => {
     const REELS = 5;
