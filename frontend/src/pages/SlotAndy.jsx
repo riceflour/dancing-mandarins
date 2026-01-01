@@ -41,6 +41,10 @@ function SlotAndy() {
     </audio>
   );
 
+  // 1
+  // 2
+  // 3
+  // a column with 3 rows
   const Spinner = forwardRef(({ onFinish, timer }, ref) => {
     const [symbols, setSymbols] = useState([null, null, null]);
     const symbolsRef = useRef(symbols);
@@ -54,6 +58,8 @@ function SlotAndy() {
     ];
 
     const spinOnce = () => {
+      // display random symbol out of 13 (later will change probabilities of each symbol)
+      // common to rare: coins, bao, tree, boat, chingling
       const newSymbols = Array.from({ length: 3 }, () =>
         SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
       );
@@ -72,7 +78,7 @@ function SlotAndy() {
       clearInterval(intervalRef.current);
       clearTimeout(timeoutRef.current);
 
-      // start spinning
+      // start spinning, change symbol every 100ms
       intervalRef.current = setInterval(spinOnce, 100);
 
       // stop spinning after timer
@@ -101,20 +107,23 @@ function SlotAndy() {
 
   const SlotMachine = () => {
     const REELS = 5;
+    // references to the _ _ _ _ _ columns , useref does not cause a rerender
     const spinnerRefs = useRef(Array(REELS).fill(null));
 
+    // helper function to log what symbols were rolled
     const handleFinish = (symbols) => {
       console.log("Reel finished:", symbols);
       // Here you can handle matches, winner logic, etc.
     };
 
+    // helper to handle respinning each column when <play> is pressed
     const handleClick = () => {
       spinnerRefs.current.forEach(spinner => spinner?.reset());
     };
 
     return (
       <div>
-        <button onClick={handleClick}>Spin</button>
+        <button onClick={handleClick}>PLAY</button>
         <div className="spinner-container">
           {Array.from({ length: REELS }).map((_, index) => (
             <Spinner
