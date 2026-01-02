@@ -46,31 +46,30 @@ function SlotAndy() {
   // 3
   // a column with 3 rows
   const Spinner = forwardRef(({ onFinish, timer }, ref) => {
-    const [symbols, setSymbols] = useState([null, null, null]);
-    const symbolsRef = useRef(symbols);
-    const intervalRef = useRef(null);
-    const timeoutRef = useRef(null);
-
     const SYMBOL_KEYS = [
       "ten","coins","bao","tree","boat","chingling",
       "symbol_a","symbol_j","symbol_k","symbol_q",
       "fu","drums","nine"
     ];
 
+    const getRandomImages = () => {
+      return Array.from({length: 3}, () => 
+        SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
+      )
+    }
+    const [symbols, setSymbols] = useState(getRandomImages);
+    const symbolsRef = useRef(symbols);
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+
+
     const spinOnce = () => {
       // display random symbol out of 13 (later will change probabilities of each symbol)
       // common to rare: coins, bao, tree, boat, chingling
-      const newSymbols = Array.from({ length: 3 }, () =>
-        SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
-      );
+      const newSymbols = getRandomImages();
 
-      symbolsRef.current = newSymbols; // ✅ keep latest
+      symbolsRef.current = newSymbols; // keep latest
       setSymbols(newSymbols);
-      // setSymbols(
-      //   Array.from({ length: 3 }, () =>
-      //     SYMBOL_KEYS[Math.floor(Math.random() * SYMBOL_KEYS.length)]
-      //   )
-      // );
     };
 
     const reset = () => {
