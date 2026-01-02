@@ -2,9 +2,11 @@ import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
 import get_symbol_image from '../exports/helper';
+import MultiplierButton from "../components/MultiplierButton";
 
 
 function SlotAndy() {
+  const REELS = 5;
   const {
     useState,
     useEffect,
@@ -46,6 +48,10 @@ function SlotAndy() {
   // 3
   // a column with 3 rows
   const Spinner = forwardRef(({ onFinish, timer }, ref) => {
+    // common 50%
+    // uncommon 25%
+    // rare 15%
+    // epic? 10%
     const SYMBOL_KEYS = [
       "ten","coins","bao","tree","boat","chingling",
       "symbol_a","symbol_j","symbol_k","symbol_q",
@@ -121,8 +127,23 @@ function SlotAndy() {
     };
 
     return (
-      <div>
-        <button onClick={handleClick}>PLAY</button>
+      // <div>
+      //   <button onClick={handleClick}>PLAY</button>
+      //   <div className="spinner-container">
+      //     {Array.from({ length: REELS }).map((_, index) => (
+      //       <Spinner
+      //         key={index}
+      //         timer={1000 + index * 300}
+      //         onFinish={handleFinish}
+      //         ref={el => (spinnerRefs.current[index] = el)}
+      //       />
+      //     ))}
+      //   </div>
+      // </div>
+
+      <div className="slot-machine">
+
+        {/* SPINNERS */}
         <div className="spinner-container">
           {Array.from({ length: REELS }).map((_, index) => (
             <Spinner
@@ -133,6 +154,47 @@ function SlotAndy() {
             />
           ))}
         </div>
+
+        {/* PLAY BUTTON */}
+        <div className="play-button-wrapper">
+          <button className="play-btn" onClick={handleClick}>
+            PLAY
+          </button>
+        </div>
+
+        {/* MULTIPLIER / GOLD SELECTORS */}
+        <div className="multiplier-grid">
+          <MultiplierButton 
+            className="multiplier-btn"
+          >
+            1 gold symbol (8 credits)
+          </MultiplierButton>
+
+          <MultiplierButton 
+            className="multiplier-btn"
+          >
+            2 gold symbols (18 credits)
+          </MultiplierButton>
+
+          <MultiplierButton 
+            className="multiplier-btn"
+          >
+            3 gold symbols (38 credits)
+          </MultiplierButton>
+
+          <MultiplierButton 
+            className="multiplier-btn"
+          >
+            3 gold symbols (68 credits)
+          </MultiplierButton>
+
+          <MultiplierButton 
+            className="multiplier-btn"
+          >
+            4 gold symbols (88 credits)
+          </MultiplierButton>
+        </div>
+
       </div>
     );
   };

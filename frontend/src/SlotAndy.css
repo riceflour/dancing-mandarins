@@ -157,7 +157,7 @@ h1 span {
   transform: translateY(-50%);
   right: 30px;
   left: 30px;
-  background: rgba(255, 0, 0, .1);  
+  /* background: rgba(255, 0, 0, .1);   */
 }
 
 .gradient-fade {
@@ -185,4 +185,46 @@ h1 span {
   .spinner-container {
     transform: translate(-50%, -50%) scale(.4, .4);
   }
+}
+
+.slot-machine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* SPINNERS */
+.spinner-container {
+  display: flex;
+  gap: 16px;
+}
+
+/* PLAY BUTTON */
+.play-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.play-btn {
+  font-size: 24px;
+  padding: 12px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 2 ROWS × 5 COLUMNS */
+.multiplier-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: fit-content;
+}
+
+.multiplier-btn {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
 }
