@@ -130,7 +130,7 @@ h1 span {
   justify-content: center;
   align-items: flex-start;
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -153,7 +153,7 @@ h1 span {
   content: '';
   display: block;
   height: 180px;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   right: 30px;
   left: 30px;
@@ -204,6 +204,7 @@ h1 span {
 .play-button-wrapper {
   display: flex;
   justify-content: center;
+  padding-top: 64vh;
 }
 
 .play-btn {
@@ -215,6 +216,7 @@ h1 span {
 
 /* 2 ROWS × 5 COLUMNS */
 .multiplier-grid {
+  /* padding-top: 58%; */
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
