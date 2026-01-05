@@ -47,7 +47,9 @@ function SlotAndy() {
   // 2
   // 3
   // a column with 3 rows
-  const Spinner = forwardRef(({ onFinish, timer }, ref) => {
+  const Spinner = forwardRef(({ onFinish, timer, goldSymbols }, ref) => {
+    const GOLD_PRIORTY = ["coins", "bao", "tree", "boat", "chingling"];
+    const goldSymbolRef = useRef(goldSymbols) // ref to stop rerender image if gold symbol changed
     // common 50%
     // uncommon 25%
     // rare 15%
@@ -86,6 +88,9 @@ function SlotAndy() {
       // start spinning, change symbol every 100ms
       intervalRef.current = setInterval(spinOnce, 100);
 
+      // keep gold symbols for this spin
+      goldSymbolRef.current = goldSymbols;
+
       // stop spinning after timer
       timeoutRef.current = setTimeout(() => {
         clearInterval(intervalRef.current);
@@ -100,7 +105,7 @@ function SlotAndy() {
         {symbols.map((symbolKey, i) => (
           <img
             key={i}
-            src={get_symbol_image(symbolKey, true)}
+            src={get_symbol_image(symbolKey, GOLD_PRIORTY.indexOf(symbolKey) < goldSymbolsRef.current)} 
             style={{ width: 188, height: 188, display: "block" }}
             alt={symbolKey}
           />
