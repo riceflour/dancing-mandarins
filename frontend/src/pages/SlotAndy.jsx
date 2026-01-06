@@ -49,7 +49,7 @@ function SlotAndy() {
   // a column with 3 rows
   const Spinner = forwardRef(({ onFinish, timer, goldSymbols }, ref) => {
     const GOLD_PRIORTY = ["coins", "bao", "tree", "boat", "chingling"];
-    const goldSymbolRef = useRef(goldSymbols) // ref to stop rerender image if gold symbol changed
+    const goldSymbolsRef = useRef(goldSymbols) // ref to stop rerender image if gold symbol changed
     // common 50%
     // uncommon 25%
     // rare 15%
@@ -89,7 +89,7 @@ function SlotAndy() {
       intervalRef.current = setInterval(spinOnce, 100);
 
       // keep gold symbols for this spin
-      goldSymbolRef.current = goldSymbols;
+      goldSymbolsRef.current = goldSymbols;
 
       // stop spinning after timer
       timeoutRef.current = setTimeout(() => {
@@ -116,6 +116,8 @@ function SlotAndy() {
 
 
   const SlotMachine = () => {
+    // everyone starts with 100 dollars aka 10000 credits, 1 credit is 1c
+    const [credits, setCredits] = useState(10000);
     const REELS = 5;
     // references to the _ _ _ _ _ columns , useref does not cause a rerender
     const spinnerRefs = useRef(Array(REELS).fill(null));
@@ -154,9 +156,21 @@ function SlotAndy() {
 
         {/* PLAY BUTTON */}
         <div className="play-button-wrapper">
+          <div className="credit-ways-container">
+            <span className='what-ways-pay-number'></span> {/*i.e. 24 ways pay 4800 */}
+            <div className='credits container'>
+
+            </div>
+            {credits}
+            <span style={{position:"absolute", bottom: "1em"}}>CREDITS</span>
+          </div>
           <button className="play-btn" onClick={handleClick}>
             PLAY
           </button>
+
+          <div>
+
+          </div>
         </div>
 
         {/* MULTIPLIER / GOLD SELECTORS */}
