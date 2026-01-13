@@ -1,7 +1,7 @@
 import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import get_symbol_image from '../exports/helper';
+import { get_symbol_image } from '../exports/helper';
 import MultiplierButtons from "../components/MultiplierButtons";
 
 
@@ -156,21 +156,35 @@ function SlotAndy() {
 
         {/* PLAY BUTTON */}
         <div className="play-button-wrapper">
-          <div className="credit-ways-container">
-            <span className='what-ways-pay-number'></span> {/*i.e. 24 ways pay 4800 */}
-            <div className='credits container'>
 
+        {/* credit ways container */}
+          <div className="credit-ways-container">
+            <span className='what-ways-pay-number' style={{color: "white"}}>
+              24 ways pay 4800
+            </span> {/*i.e. 24 ways pay 4800 */}
+
+            <div className="credits-wrapper">
+              <div className='credits-container'>
+                ${(credits / 100).toFixed(2)}
+              </div>
+
+              <span className='credits-container-text'>CASH</span>
             </div>
-            {credits}
-            <span style={{position:"absolute", bottom: "1em"}}>CREDITS</span>
+            
           </div>
+            
+          <div className='win-container'>
+            <div className='win-container-inner'>
+              <span className='win-text'>4393</span>
+            </div>
+            <span className='win-on-border'>win</span>
+
+          </div>
+
           <button className="play-btn" onClick={handleClick}>
             PLAY
           </button>
 
-          <div>
-
-          </div>
         </div>
 
         {/* MULTIPLIER / GOLD SELECTORS */}

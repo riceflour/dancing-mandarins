@@ -141,11 +141,81 @@ h1 span {
   overflow: hidden;
   width: 188px;
   height: 564px; /* 3 symbols × 188 */
+  background-image: linear-gradient(to right, #360103 , #9d0001, #360103);
 }
 
+.win-text {
+  font-size: 50px;
+  font-weight: 600;
+}
+
+.win-container-inner {
+  border: #FFC000 2px solid;
+  display: flex; 
+  align-items: center;
+  background: black;
+  color: white;
+  justify-content: center;
+  width: 250px;
+}
+
+body {
+  background-image: linear-gradient(to right, #59001e , #9d0001, #59001e);
+}
+
+.credits-container {
+  border: #FFC000 2px solid;
+  display: flex; 
+  align-items: center;
+  background: black;
+  color: white;
+  justify-content: center;
+  height: 50px
+}
+
+.credits-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.credit-ways-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: -50px;
+}
+
+.credits-container-text {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 65%); /* center + sit on border */
+  padding: 0 6px;
+  font-size: 15px;
+  color: white;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.win-on-border {
+  color: white;
+  font-size: 20px;
+}
+
+.win-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .app-wrap.winner-false {
   animation: linear 1s spin;
+}
+
+.spinner-container {
+  background-image: linear-gradient(to bottom, #f9ba0b , #8c1700, #f9ba0b, #8c1700);
+  border: 10px solid #f9ba0b;
+  border-image: linear-gradient(to right,#8c1700, #f9ba0b,  #8c1700, #f9ba0b); /* Apply the gradient */
 }
 
 .spinner-container::after {
@@ -203,8 +273,17 @@ h1 span {
 /* PLAY BUTTON */
 .play-button-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   padding-top: 64vh;
+  width: 550px;
+}
+
+/*if width is > 1000 then take 1000px, otherwise take 550px */
+@media (min-width: 1000px) {
+  /* … */
+  .play-button-wrapper {
+    width: 1000px;
+  }
 }
 
 .play-btn {
@@ -212,6 +291,8 @@ h1 span {
   padding: 12px 40px;
   border-radius: 8px;
   cursor: pointer;
+  height: 70px;
+  margin-top: 15px;
 }
 
 /* 2 ROWS × 5 COLUMNS */

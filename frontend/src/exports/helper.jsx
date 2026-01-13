@@ -1,6 +1,6 @@
 import SYMBOLS from './symbols'
 
-export default function get_symbol_image(symbol_key, is_active) {
+export function get_symbol_image(symbol_key, is_active) {
     const symbol = SYMBOLS[symbol_key];
     if (!symbol) return null;
 
