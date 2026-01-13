@@ -1,7 +1,7 @@
 import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { get_symbol_image } from '../exports/helper';
+import { get_symbol_image, return_win } from '../exports/helper';
 import MultiplierButtons from "../components/MultiplierButtons";
 
 
@@ -125,7 +125,7 @@ function SlotAndy() {
     // which symbols are gold
     const [goldSymbols, setGoldSymbols] = useState(5);
     // credits earned from spin
-    const [win, setWin] = useState();
+    const [win, setWin] = useState(0); // i want if its 0 to just show nothing TODO
 
     // multipler selection, 1x (default), 2x, 3x, 4x, 5x(max)
     const [multiplier, setMultiplier] = useState(1);
@@ -137,9 +137,50 @@ function SlotAndy() {
 
       // check if all reels are done
       const done = resultsRef.current.every(Boolean); // is every element truthy
+      // might move this to a helper function TODO
+      // TODO deal with the issue if fu is in the first column
       if (done) {
         console.log(`done! ${resultsRef.current}`);
-        // call calculate win 
+        // call calculate win
+        // i.e. resultsRef.current[0] = ["coins", "bao", "ten"];
+        // resultsRef.current[1] = ["tree", "boat", "bao"];
+        // resultsRef.current === [
+          //   ["coins","bao","ten"],
+          //   ["tree","boat","bao"],
+          //   ["fu","coins","nine"],
+          //   ["ten","bao","tree"],
+          //   ["coins","coins","coins"]
+          // ]
+        let finalWin = 0;
+        for (let j = 0; j < 3; j++) {
+          let curr = resultsRef.current[0][j];
+          // if the symbol appears in first 3 columns
+          let columnsMatched = 1;
+          let ways = 1;
+
+          // go through to see if next column contains this
+          for (let i = 1; i < 5; i++) {
+            // if it doesnt include curr symbol break (fu counts too)
+            if (!(resultsRef.current[i].includes(curr) || resultsRef.current[i].includes("fu"))) {
+              break;
+            }
+            // if it does, columns matched ++ and see how many times it appears
+            columnsMatched++;
+            // fu also counts as 1
+            ways *= resultsRef.current[i].filter(item => item === curr || item === "fu").length;
+          }
+
+          // does not even count if columns matched < 3 :(
+          if (columnsMatched < 3) continue;
+
+          // check if columns matched >= 3
+          finalWin += ways * return_win(curr, goldSymbols, columnsMatched);
+          // win is calculated via every symbol ways * their wweight + every other symbol
+        }
+        // array with all wins and ways TODO
+        // setWinWaysArray(...)
+        // times multiplier 
+        setWin(multiplier * finalWin);
       }
     };
 
@@ -185,7 +226,7 @@ function SlotAndy() {
             
           <div className='win-container'>
             <div className='win-container-inner'>
-              <span className='win-text'>4393</span>
+              <span className='win-text'>{win}</span>
             </div>
             <span className='win-on-border'>WIN</span>
 
