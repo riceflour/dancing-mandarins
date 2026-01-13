@@ -47,7 +47,7 @@ function SlotAndy() {
   // 2
   // 3
   // a column with 3 rows
-  const Spinner = forwardRef(({ onFinish, timer, goldSymbols }, ref) => {
+  const Spinner = forwardRef(({ onFinish, timer, goldSymbols}, ref) => {
     const GOLD_PRIORTY = ["coins", "bao", "tree", "boat", "chingling"];
     const goldSymbolsRef = useRef(goldSymbols) // ref to stop rerender image if gold symbol changed
     // common 50%
@@ -121,16 +121,26 @@ function SlotAndy() {
     const REELS = 5;
     // references to the _ _ _ _ _ columns , useref does not cause a rerender
     const spinnerRefs = useRef(Array(REELS).fill(null));
+    const resultsRef = useRef(Array(REELS).fill(null));
     // which symbols are gold
     const [goldSymbols, setGoldSymbols] = useState(5);
+    // credits earned from spin
+    const [win, setWin] = useState();
 
     // multipler selection, 1x (default), 2x, 3x, 4x, 5x(max)
     const [multiplier, setMultiplier] = useState(1);
 
     // helper function to log what symbols were rolled
-    const handleFinish = (symbols) => {
+    const handleFinish = (reelIndex, symbols) => {
+      resultsRef.current[reelIndex] = symbols;
       console.log("Reel finished:", symbols);
-      // Here you can handle matches, winner logic, etc.
+
+      // check if all reels are done
+      const done = resultsRef.current.every(Boolean); // is every element truthy
+      if (done) {
+        console.log(`done! ${resultsRef.current}`);
+        // call calculate win 
+      }
     };
 
     // helper to handle respinning each column when <play> is pressed
@@ -148,7 +158,7 @@ function SlotAndy() {
               key={index}
               timer={1000 + index * 300}
               goldSymbols={goldSymbols}
-              onFinish={handleFinish}
+              onFinish={(symbols) => handleFinish(index, symbols)}
               ref={el => (spinnerRefs.current[index] = el)}
             />
           ))}
@@ -177,7 +187,7 @@ function SlotAndy() {
             <div className='win-container-inner'>
               <span className='win-text'>4393</span>
             </div>
-            <span className='win-on-border'>win</span>
+            <span className='win-on-border'>WIN</span>
 
           </div>
 

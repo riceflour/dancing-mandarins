@@ -189,7 +189,7 @@ body {
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, 65%); /* center + sit on border */
+  transform: translate(-50%, 85%); /* center + sit on border */
   padding: 0 6px;
   font-size: 15px;
   color: white;
