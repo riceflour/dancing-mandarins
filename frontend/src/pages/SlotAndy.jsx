@@ -1,7 +1,7 @@
 import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { get_symbol_image, return_win } from '../exports/helper';
+import { get_symbol_image, return_win, creditCost } from '../exports/helper';
 import MultiplierButtons from "../components/MultiplierButtons";
 
 
@@ -126,6 +126,8 @@ function SlotAndy() {
     const [goldSymbols, setGoldSymbols] = useState(5);
     // credits earned from spin
     const [win, setWin] = useState(0); // i want if its 0 to just show nothing TODO
+    const [winWays, setwinWays] = useState([]); // like 24 ways win 4800 and 3 way 15 it will be [[24,4800],[3, 15]]
+    const [winWaysIndex, setWinWaysIndex] = useState(0);
 
     // multipler selection, 1x (default), 2x, 3x, 4x, 5x(max)
     const [multiplier, setMultiplier] = useState(1);
@@ -133,7 +135,6 @@ function SlotAndy() {
     // helper function to log what symbols were rolled
     const handleFinish = (reelIndex, symbols) => {
       resultsRef.current[reelIndex] = symbols;
-      console.log("Reel finished:", symbols);
 
       // check if all reels are done
       const done = resultsRef.current.every(Boolean); // is every element truthy
@@ -141,17 +142,11 @@ function SlotAndy() {
       // TODO deal with the issue if fu is in the first column
       if (done) {
         console.log(`done! ${resultsRef.current}`);
+        console.log(`done! ${winWays.length} winWays.length, ${winWays} winways`);
         // call calculate win
-        // i.e. resultsRef.current[0] = ["coins", "bao", "ten"];
-        // resultsRef.current[1] = ["tree", "boat", "bao"];
-        // resultsRef.current === [
-          //   ["coins","bao","ten"],
-          //   ["tree","boat","bao"],
-          //   ["fu","coins","nine"],
-          //   ["ten","bao","tree"],
-          //   ["coins","coins","coins"]
-          // ]
+
         let finalWin = 0;
+        const waysArray = [];
         for (let j = 0; j < 3; j++) {
           let curr = resultsRef.current[0][j];
           // if the symbol appears in first 3 columns
@@ -172,22 +167,44 @@ function SlotAndy() {
 
           // does not even count if columns matched < 3 :(
           if (columnsMatched < 3) continue;
-
+          const creditsWon = return_win(curr, goldSymbols, columnsMatched);
           // check if columns matched >= 3
-          finalWin += ways * return_win(curr, goldSymbols, columnsMatched);
+          finalWin += ways * creditsWon;
+          waysArray.push([ways, ways * creditsWon])
           // win is calculated via every symbol ways * their wweight + every other symbol
         }
         // array with all wins and ways TODO
         // setWinWaysArray(...)
+        setwinWays(waysArray);
+
         // times multiplier 
         setWin(multiplier * finalWin);
+        resultsRef.current = Array(REELS).fill(null); // reset
       }
     };
 
     // helper to handle respinning each column when <play> is pressed
     const handleClick = () => {
+      // credits are added when new spin is done
+      setCredits(credits - multiplier * creditCost(goldSymbols) + win);
       spinnerRefs.current.forEach(spinner => spinner?.reset());
     };
+
+
+    // loop through different ways and pay
+    useEffect(() => {
+      if (winWays.length === 0) {
+        setWinWaysIndex(0); // reset safely
+        return;
+      }
+      const interval = setInterval(() => {
+        setWinWaysIndex(prev => {
+          return (prev + 1) % winWays.length;
+        });
+      }, 1500) // changes every 1.5 secs
+      return () => clearInterval(interval);
+    }, [winWays.length]);
+
 
     return (
       <div className="slot-machine">
@@ -210,9 +227,11 @@ function SlotAndy() {
 
         {/* credit ways container */}
           <div className="credit-ways-container">
-            <span className='what-ways-pay-number' style={{color: "white"}}>
-              24 ways pay 4800
-            </span> {/*i.e. 24 ways pay 4800 */}
+            {winWays.length > 0 && 
+              <span className="what-ways-pay-number" style={{ color: "white" }}>
+                {winWays[winWaysIndex][0]} ways pay {winWays[winWaysIndex][1]}
+              </span>
+            }
 
             <div className="credits-wrapper">
               <div className='credits-container'>

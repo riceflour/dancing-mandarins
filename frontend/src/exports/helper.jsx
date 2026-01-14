@@ -69,3 +69,6 @@ export function return_win(symbol_key, goldSymbols, columnsMatched) {
         
 }
 
+export function creditCost(goldSymbols) {
+    return goldSymbols === 5 ? 88 : goldSymbols === 4 ? 68 : goldSymbols === 3 ? 38 : goldSymbols === 2 ? 18 : 8;  
+}
