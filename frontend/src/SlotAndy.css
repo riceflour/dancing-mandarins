@@ -188,6 +188,20 @@ body {
   width: 150px;
 }
 
+.bottom-right-credits {
+  position: absolute;
+  bottom: 12px;     /* distance from bottom of slot machine */
+  right: 12px;      /* distance from right */
+  background-image: linear-gradient(to bottom, #f9ba0b, #ba2709);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
 .credits-container-text {
   position: absolute;
   bottom: 0;

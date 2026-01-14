@@ -173,8 +173,6 @@ function SlotAndy() {
           waysArray.push([ways, ways * creditsWon])
           // win is calculated via every symbol ways * their wweight + every other symbol
         }
-        // array with all wins and ways TODO
-        // setWinWaysArray(...)
         setwinWays(waysArray);
 
         // times multiplier 
@@ -264,6 +262,8 @@ function SlotAndy() {
           multiplier={multiplier}
           setMultiplier={setMultiplier}
         />
+
+        <div className='bottom-right-credits'>{multiplier * creditCost(goldSymbols)}¢</div>
 
       </div>
     );
