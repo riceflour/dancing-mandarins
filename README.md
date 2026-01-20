@@ -7,3 +7,8 @@ In progress. Current features are
 - a multiplier to previously chosen bet amount, x1 x2 x3 x4 x5
 - starting with 10000 credits
 
+
+
+
+Uploading Screen Recording 2026-01-20 155735.mp4…
+
