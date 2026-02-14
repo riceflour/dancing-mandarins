@@ -1,7 +1,7 @@
 import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { get_symbol_image, creditCost, return_array_of_wins, returnPointsEarned } from '../exports/helper';
+import { get_symbol_image, creditCost, returnPointsEarned } from '../exports/helper';
 import MultiplierButtons from "../components/MultiplierButtons";
 
 

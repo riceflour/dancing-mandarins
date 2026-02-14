@@ -69,42 +69,6 @@ function return_win(symbol_key, goldSymbols, columnsMatched) {
         
 }
 
-export function return_array_of_wins(results, goldSymbols) {
-    console.log(`received ${results}`)
-    // must consider case of fu 
-    let isFu = false;
-    const waysArray = [];
-    for (let j = 0; j < 3; j++) {
-        let curr = results[0][j];
-        // if the symbol appears in first 3 columns
-        let columnsMatched = 1;
-        let ways = 1;
-        if (curr === "fu") isFu = true;
-
-        // go through to see if next column contains this
-        for (let i = 1; i < 5; i++) {
-            // if it doesnt include curr symbol break (fu counts too)
-            (!(results[i].includes("fu"))) ? isFu = false : isFu = true;
-
-            if (!(results[i].includes(curr) || results[i].includes("fu")) || isFu) {
-                break;
-            }
-            // if it does, columns matched ++ and see how many times it appears
-            columnsMatched++;
-
-            // fu also counts as 1
-            ways *= results[i].filter(item => item === curr || item === "fu").length;
-        }
-
-        // does not even count if columns matched < 3 :(
-        if (columnsMatched < 3) continue;
-        const creditsWon = return_win(curr, goldSymbols, columnsMatched);
-        // check if columns matched >= 3
-        waysArray.push([ways, ways * creditsWon])
-        // win is calculated via every symbol ways * their wweight + every other symbol
-    }
-    return waysArray;
-}
 
 export function creditCost(goldSymbols) {
     return goldSymbols === 5 ? 88 : goldSymbols === 4 ? 68 : goldSymbols === 3 ? 38 : goldSymbols === 2 ? 18 : 8;  
@@ -127,22 +91,20 @@ export function returnPointsEarned(results, goldSymbols) {
             const matches = results[i].filter(
                 item => item === symbol || item === "fu"
             )
+
             if (matches.length === 0) {
-                if (i < 3) {
-                    // didn't exceed third column
-                    console.log(`${symbol} finished at ${i} column did not make it :(`);
-                    return;
-                } else {
-                    const creditsWon = return_win(symbol, goldSymbols, colsMatched);
-                    returnArray.push([ways, ways* creditsWon])
-                    return;
-                }
-            } 
+                break;
+            }
             ways *= matches.length;
             colsMatched++;
         }
+        if (colsMatched < 3) {
+            console.log(`${symbol} finished at ${colsMatched} column did not make it :(`);
+            return;
+        }
         const creditsWon = return_win(symbol, goldSymbols, colsMatched);
         returnArray.push([ways, ways* creditsWon])
+        return;
     }
 
 
