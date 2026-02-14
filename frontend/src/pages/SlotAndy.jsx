@@ -1,7 +1,7 @@
 import '../SlotAndy.css';
 import React from "react";
 import ReactDOM from 'react-dom/client';
-import { get_symbol_image, return_win, creditCost } from '../exports/helper';
+import { get_symbol_image, creditCost, return_array_of_wins, returnPointsEarned } from '../exports/helper';
 import MultiplierButtons from "../components/MultiplierButtons";
 
 
@@ -141,39 +141,16 @@ function SlotAndy() {
       // might move this to a helper function TODO
       // TODO deal with the issue if fu is in the first column
       if (done) {
-        console.log(`done! ${resultsRef.current}`);
-        console.log(`done! ${winWays.length} winWays.length, ${winWays} winways`);
-        // call calculate win
-
+        console.log(resultsRef.current);
+        // let returnedWinArray = return_array_of_wins(resultsRef.current, goldSymbols);
+        let returnedWinArray = returnPointsEarned(resultsRef.current, goldSymbols);
         let finalWin = 0;
-        const waysArray = [];
-        for (let j = 0; j < 3; j++) {
-          let curr = resultsRef.current[0][j];
-          // if the symbol appears in first 3 columns
-          let columnsMatched = 1;
-          let ways = 1;
-
-          // go through to see if next column contains this
-          for (let i = 1; i < 5; i++) {
-            // if it doesnt include curr symbol break (fu counts too)
-            if (!(resultsRef.current[i].includes(curr) || resultsRef.current[i].includes("fu"))) {
-              break;
-            }
-            // if it does, columns matched ++ and see how many times it appears
-            columnsMatched++;
-            // fu also counts as 1
-            ways *= resultsRef.current[i].filter(item => item === curr || item === "fu").length;
-          }
-
-          // does not even count if columns matched < 3 :(
-          if (columnsMatched < 3) continue;
-          const creditsWon = return_win(curr, goldSymbols, columnsMatched);
-          // check if columns matched >= 3
-          finalWin += ways * creditsWon;
-          waysArray.push([ways, ways * creditsWon])
-          // win is calculated via every symbol ways * their wweight + every other symbol
+        for (let i = 0; i < returnedWinArray.length; i++) {
+          finalWin += returnedWinArray[i][1];
         }
-        setwinWays(waysArray);
+        console.log(`${returnedWinArray} returned win array, ${finalWin} finalwin`);
+        setwinWays(returnedWinArray);
+        setWin(finalWin);
 
         // times multiplier 
         setWin(multiplier * finalWin);
