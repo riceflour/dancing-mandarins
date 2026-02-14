@@ -131,6 +131,7 @@ function SlotAndy() {
 
     // multipler selection, 1x (default), 2x, 3x, 4x, 5x(max)
     const [multiplier, setMultiplier] = useState(1);
+    const [multiplierConst, setMultiplierConst] = useState(1);
 
     // helper function to log what symbols were rolled
     const handleFinish = (reelIndex, symbols) => {
@@ -160,6 +161,13 @@ function SlotAndy() {
 
     // helper to handle respinning each column when <play> is pressed
     const handleClick = () => {
+      // clear win ways 
+      setwinWays([]); // reset safely
+      // set win back to 0
+      setWin(0);
+
+      // update old multiplier 
+      setMultiplierConst(multiplier);
       // credits are added when new spin is done
       setCredits(credits - multiplier * creditCost(goldSymbols) + win);
       spinnerRefs.current.forEach(spinner => spinner?.reset());
@@ -204,7 +212,7 @@ function SlotAndy() {
           <div className="credit-ways-container">
             {winWays.length > 0 && 
               <span className="what-ways-pay-number" style={{ color: "white" }}>
-                {winWays[winWaysIndex][0]} ways pay {winWays[winWaysIndex][1]}
+                {winWays[winWaysIndex][0]} ways pay {winWays[winWaysIndex][1] * multiplierConst}
               </span>
             }
 
